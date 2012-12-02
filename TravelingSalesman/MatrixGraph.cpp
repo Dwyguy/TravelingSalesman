@@ -27,8 +27,10 @@ void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
 		M[u][v] = weight;
 		M[v][u] = weight;
 	}
-	//else
-		//M[u][v] = -1;
+	else
+		M[u][v] = 0;
+
+	num_edges++;
 }
 
 EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
