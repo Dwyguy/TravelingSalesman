@@ -27,8 +27,8 @@ void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
 		M[u][v] = weight;
 		M[v][u] = weight;
 	}
-	else
-		M[u][v] = -1;
+	//else
+		//M[u][v] = -1;
 }
 
 EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
@@ -52,24 +52,12 @@ std::list<NWPair> MatrixGraph::getAdj(NodeID u) const
 
 unsigned MatrixGraph::degree(NodeID u) const
 {
-
-	/*
-	int degree = 0;
-
-	for each vector element in M[u]
-	if(M[u][element] != -1)
-	degree++;
-
-	return degree;
-
-	*/
-	return 0;
+	return getAdj(u).size();
 }
 
 unsigned MatrixGraph::size() const
 {
-	/* graph traversal here, or just make a variable.  Not sure if we can edit MatrixGraph.h or not */
-	return 0;
+	return M.size();
 }
 
 unsigned MatrixGraph::numEdges() const
