@@ -47,7 +47,7 @@ std::list<NWPair> MatrixGraph::getAdj(NodeID u) const
 
 	for(int x = 0; x < M.size(); x++)
 		if(M[u][x] != 0)
-			nodeList->push_back(make_pair(u, M[u][x]));
+			nodeList->push_back(make_pair(x, M[u][x]));
 
 	return *nodeList;
 }
