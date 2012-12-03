@@ -32,3 +32,6 @@ void tour(int* arr, int numnodes, int startingPlace);
 
 // Swaps stuff
 void swap(int a, int b);
+
+// New stuff
+void tourCycle(double sum, int cur);

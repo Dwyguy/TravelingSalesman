@@ -5,6 +5,7 @@ int* currentTour;
 double bestLen;
 double currentLen;
 Graph* graph;
+int size;
 
 void setup(Graph* G)
 {
@@ -12,6 +13,7 @@ void setup(Graph* G)
 	bestLen = 0.0;
 	currentLen = 0.0;
 	graph = G;
+	size = G->size();
 
 	currentTour = new int[G->size()];
 
@@ -20,6 +22,11 @@ void setup(Graph* G)
 		currentTour[x] = x;
 	}
 	
+	for(int y = 0; y < size - 1; y++)
+		bestLen += graph->weight(currentTour[y], currentTour[y + 1]);
+
+	bestLen += graph->weight(currentTour[size - 1], currentTour[0]);
+
 }
 
 
@@ -57,12 +64,34 @@ void tour(int* arr, int numnodes, int startingPlace)
 	}
 	else
 	{
+		double sum = graph->weight(currentTour[startingPlace], currentTour[startingPlace + 1]);
+
+
 		for(int x = startingPlace; x < numnodes; x++)
 		{
-			//if(startingPlace != 0) 
-				swap(startingPlace, x);
+			swap(startingPlace, x);
+			tourCycle(sum, startingPlace);
 			tour(arr, numnodes, startingPlace + 1);
 			swap(x, startingPlace);
 		}
 	}
+}
+
+void tourCycle(double sum, int cur)
+{
+	//sum = 0;
+
+	for(int x = cur; x < size - 1; x++)
+		sum += graph->weight(currentTour[x], currentTour[x + 1]);
+
+	sum += graph->weight(currentTour[size - 1], 0);
+
+	if(sum < bestLen)
+	{
+		for(int y = 0; y < size; y++)
+			bestTour[y] = currentTour[y];
+
+		bestLen = sum;
+	}
+
 }
