@@ -35,7 +35,7 @@ void MatrixGraph::addEdge(NodeID u, NodeID v, EdgeWeight weight)
 
 EdgeWeight MatrixGraph::weight(NodeID u, NodeID v) const
 {
-	if(M[u][v] != -1)
+	if(M[u][v] != 0)
 		return M[u][v];
 	else
 		return 0;

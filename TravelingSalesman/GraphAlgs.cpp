@@ -26,7 +26,7 @@ void setup(Graph* G)
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
 {
 	setup(G);
-	tour(currentTour, G->size(), 0);
+	tour(currentTour, G->size(), 1);
 
 	std::pair<std::vector<NodeID>, EdgeWeight> bestPair = std::make_pair(bestTour, bestLen);
 	return bestPair;
@@ -59,7 +59,8 @@ void tour(int* arr, int numnodes, int startingPlace)
 	{
 		for(int x = startingPlace; x < numnodes; x++)
 		{
-			swap(startingPlace, x);
+			//if(startingPlace != 0) 
+				swap(startingPlace, x);
 			tour(arr, numnodes, startingPlace + 1);
 			swap(x, startingPlace);
 		}
