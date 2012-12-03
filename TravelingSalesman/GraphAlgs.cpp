@@ -1,28 +1,55 @@
 #include "GraphAlgs.h"
 
 
-void GraphAlgs::setup(Graph* G)
+void setup(Graph* G)
 {
 	bestTour.resize(G->size());
-	bestTourLen = 0.0;
+	bestLen = 0.0;
+	currentLen = 0.0;
+	graph = G;
+
+	currentTour = new int[G->size()];
 
 	for(int x = 0; x < G->size(); x++)
 	{
-		currentTour[x] = 0;
+		currentTour[x] = x;
 	}
 	
 }
 
 
-std::pair<std::vector<NodeID>, EdgeWeight> GraphAlgs::TSP(Graph* G)
+std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
 {
 	setup(G);
+	tour(currentTour, G->size(), 0);
+
+	std::pair<std::vector<NodeID>, EdgeWeight> bestPair = std::make_pair(bestTour, bestLen);
+	return bestPair;
 }
 
-std::vector<NodeID> GraphAlgs::tour(int* arr, int numnodes, int startingPlace);
+void swap(int a, int b)
+{
+	int temp = currentTour[a];
+	currentTour[a] = currentTour[b];
+	currentTour[b] = temp;
+}
+
+void tour(int* arr, int numnodes, int startingPlace)
 {
 	if(numnodes - startingPlace == 1)
-		int stuff;
+	{
+		for(int y = 0; y < startingPlace; y++)
+			currentLen += graph->weight(arr[y], arr[y + 1]);
+
+		currentLen += graph->weight(arr[graph->size()] - 1, 0);
+
+		if(currentLen <= bestLen)
+		{
+			bestLen = currentLen;
+			for(int z = 0; z < graph->size(); z++)
+				bestTour[z] = currentTour[z];
+		}
+	}
 	else
 	{
 		for(int x = startingPlace; x < numnodes; x++)
@@ -34,12 +61,7 @@ std::vector<NodeID> GraphAlgs::tour(int* arr, int numnodes, int startingPlace);
 	}
 }
 
-void GraphAlgs::swap(int a, int b)
-{
-	int temp = currentTour[a];
-	currentTour[a] = currentTour[b];
-	currentTour[b] = temp;
-}
+
 	
 
 /*void DFS(G, S)

@@ -4,36 +4,35 @@
 
 #pragma once
 
-
-class GraphAlgs
-{
-public:
-	std::vector<NodeID> bestTour;
-	int* currentTour;
-	double bestTourLen;
-	double currentLen;
+std::vector<NodeID> bestTour;
+int* currentTour;
+double bestLen;
+double currentLen;
+Graph* graph;
 
 
-	/*
-	 * Solves the Traveling Salesperson Problem: finding the shortest cycle through a graph that 
-	 * vists every node exactly once (with exception of the first node, which is repeated as the 
-	 * last node in the cycle.)
-	 * 
-	 * Return value: Return a pair, with the first element being a vector of length n listing the 
-	 *  order of the nodes in the cycle (do NOT list the start node twice), and the second element
-	 *  being the length of that path (do NOT forget to include the edge from the last node back to
-	 *  the start node in the total length.
-	 *
-	 * Preconditions: 
-	 *     G is undirected.
-	 *     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
-	 */
+/*
+	* Solves the Traveling Salesperson Problem: finding the shortest cycle through a graph that 
+	* vists every node exactly once (with exception of the first node, which is repeated as the 
+	* last node in the cycle.)
+	* 
+	* Return value: Return a pair, with the first element being a vector of length n listing the 
+	*  order of the nodes in the cycle (do NOT list the start node twice), and the second element
+	*  being the length of that path (do NOT forget to include the edge from the last node back to
+	*  the start node in the total length.
+	*
+	* Preconditions: 
+	*     G is undirected.
+	*     Every pair of nodes u,v  (u != v) has an edge connecting the of weight > 0.
+	*/
 
-	std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
+std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
 
-	// Sets everything up
-	void setup(Graph* G);
+// Sets everything up
+void setup(Graph* G);
 
-	// Runs through a tour
-	std::vector<NodeID> tour(int* arr, int numnodes, int startingPlace);
-}
+// Runs through a tour
+void tour(int* arr, int numnodes, int startingPlace);
+
+// Swaps stuff
+void swap(int a, int b);
