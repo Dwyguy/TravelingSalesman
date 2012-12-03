@@ -1,5 +1,10 @@
 #include "GraphAlgs.h"
 
+std::vector<NodeID> bestTour;
+int* currentTour;
+double bestLen;
+double currentLen;
+Graph* graph;
 
 void setup(Graph* G)
 {
@@ -29,7 +34,7 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
 
 void swap(int a, int b)
 {
-	int temp = currentTour[a];
+	NodeID temp = currentTour[a];
 	currentTour[a] = currentTour[b];
 	currentTour[b] = temp;
 }
@@ -41,12 +46,12 @@ void tour(int* arr, int numnodes, int startingPlace)
 		for(int y = 0; y < startingPlace; y++)
 			currentLen += graph->weight(arr[y], arr[y + 1]);
 
-		currentLen += graph->weight(arr[graph->size()] - 1, 0);
+		currentLen += graph->weight(arr[numnodes - 1], 0);
 
 		if(currentLen <= bestLen)
 		{
 			bestLen = currentLen;
-			for(int z = 0; z < graph->size(); z++)
+			for(int z = 0; z < numnodes; z++)
 				bestTour[z] = currentTour[z];
 		}
 	}
@@ -60,28 +65,3 @@ void tour(int* arr, int numnodes, int startingPlace)
 		}
 	}
 }
-
-
-	
-
-/*void DFS(G, S)
-{
-	Stack openList;
-	int seenList;
-	openList.push(S);
-	seenList[S] = S;
-	
-	while(!openList.empty())
-	{
-		u = openList.top();
-		openList.pop();
-		
-		for all v, which are neighbors of u
-		if(seenList[v] == -1)
-		{
-			seenList[v] = u;
-			openList.push[v];
-		}
-	}
-}
-*/

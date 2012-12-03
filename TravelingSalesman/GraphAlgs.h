@@ -4,11 +4,7 @@
 
 #pragma once
 
-std::vector<NodeID> bestTour;
-int* currentTour;
-double bestLen;
-double currentLen;
-Graph* graph;
+
 
 
 /*
