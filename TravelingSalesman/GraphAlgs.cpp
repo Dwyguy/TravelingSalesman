@@ -1,4 +1,5 @@
 #include "GraphAlgs.h"
+#include <iostream>
 
 std::vector<NodeID> bestTour;
 int* currentTour;
@@ -6,6 +7,8 @@ double bestLen;
 double currentLen;
 Graph* graph;
 int size;
+double sum1;
+int count = 0;
 
 void setup(Graph* G)
 {
@@ -20,8 +23,10 @@ void setup(Graph* G)
 	for(int x = 0; x < G->size(); x++)
 	{
 		currentTour[x] = x;
+		bestTour[x] = x;
 	}
 	
+	// Need to initialize best length for later tests
 	for(int y = 0; y < size - 1; y++)
 		bestLen += graph->weight(currentTour[y], currentTour[y + 1]);
 
@@ -35,8 +40,7 @@ std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
 	setup(G);
 	tour(currentTour, G->size(), 1);
 
-	std::pair<std::vector<NodeID>, EdgeWeight> bestPair = std::make_pair(bestTour, bestLen);
-	return bestPair;
+	return make_pair(bestTour, bestLen);
 }
 
 void swap(int a, int b)
@@ -64,34 +68,41 @@ void tour(int* arr, int numnodes, int startingPlace)
 	}
 	else
 	{
-		double sum = graph->weight(currentTour[startingPlace], currentTour[startingPlace + 1]);
+		double sum = 0.0;
+		for(int y = 0; y < startingPlace - 1; y++)
+			sum = graph->weight(currentTour[y], currentTour[y + 1]);
 
-
-		for(int x = startingPlace; x < numnodes; x++)
+		if(sum < bestLen)
 		{
-			swap(startingPlace, x);
-			tourCycle(sum, startingPlace);
-			tour(arr, numnodes, startingPlace + 1);
-			swap(x, startingPlace);
+			for(int x = startingPlace + 1; x < numnodes; x++)
+			{
+				swap(startingPlace, x);
+				tourCycle(sum, startingPlace);
+				tour(arr, numnodes, startingPlace + 1);
+				swap(x, startingPlace);
+			}
 		}
+		else
+			return;
 	}
 }
 
 void tourCycle(double sum, int cur)
 {
-	//sum = 0;
+	double newsum = 0;
 
-	for(int x = cur; x < size - 1; x++)
-		sum += graph->weight(currentTour[x], currentTour[x + 1]);
+	// Sums the current tour
+	for(int x = 0; x < size - 1; x++)
+		newsum += graph->weight(currentTour[x], currentTour[x + 1]);
 
-	sum += graph->weight(currentTour[size - 1], 0);
+	newsum += graph->weight(currentTour[size - 1], 0);
 
-	if(sum < bestLen)
+	if(newsum < bestLen)
 	{
 		for(int y = 0; y < size; y++)
 			bestTour[y] = currentTour[y];
 
-		bestLen = sum;
+		bestLen = newsum;
 	}
 
 }
