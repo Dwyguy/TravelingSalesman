@@ -24,14 +24,24 @@
 
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G);
 
-// Sets everything up
+/**
+* Sets up the TravelingSalesPerson problem
+*/
 void setup(Graph* G);
 
-// Runs through a tour
-void tour(int* arr, int numnodes, int startingPlace);
+/**
+* Goes through a tour of the data.  Recursive method.
+* startingPlace: Where the cursor is starting each run through
+* sum: The incremental sum of the weights
+*/
+void tour(int* arr, int numnodes, int startingPlace, int sum);
 
-// Swaps stuff
+/**
+* Swaps a and b
+*/
 void swap(int a, int b);
 
-// New stuff
+/**
+* Sums the current tour, and sees if it is better than the best tour so far.
+*/
 void tourCycle(double sum, int cur);

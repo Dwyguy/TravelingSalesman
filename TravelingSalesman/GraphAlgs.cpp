@@ -1,3 +1,17 @@
+/**
+* @file GraphAlgs.cpp
+* CSE 274 - Fall 2012
+* My solution for Traveling Sales Person
+*
+* @author Matthew Dwyer
+* @date 12/3/2012
+*
+* @note This file is (c) 2012. It is licensed under the
+* CC BY 3.0 license (http://creativecommons.org/licenses/by/3.0/),
+* which means you are free to use, share, and remix it as long as you
+* give attribution. Commercial uses are allowed.
+*/
+
 #include "GraphAlgs.h"
 #include <iostream>
 
@@ -20,7 +34,7 @@ void setup(Graph* G)
 
 	currentTour = new int[G->size()];
 
-	for(int x = 0; x < G->size(); x++)
+	for(int x = 0; x < size; x++)
 	{
 		currentTour[x] = x;
 		bestTour[x] = x;
@@ -38,7 +52,9 @@ void setup(Graph* G)
 std::pair<std::vector<NodeID>, EdgeWeight> TSP(Graph* G)
 {
 	setup(G);
-	tour(currentTour, G->size(), 1);
+	
+	// Starting place is 1, the initial sum is 0
+	tour(currentTour, size, 1, 0);
 
 	return make_pair(bestTour, bestLen);
 }
@@ -50,59 +66,40 @@ void swap(int a, int b)
 	currentTour[b] = temp;
 }
 
-void tour(int* arr, int numnodes, int startingPlace)
+void tour(int* arr, int numnodes, int startingPlace, int sum)
 {
-	if(numnodes - startingPlace == 1)
+	
+	if(sum < bestLen)
 	{
-		for(int y = 0; y < startingPlace; y++)
-			currentLen += graph->weight(arr[y], arr[y + 1]);
-
-		currentLen += graph->weight(arr[numnodes - 1], 0);
-
-		if(currentLen <= bestLen)
+		// Thanks to Matthew Marine for pointing out that I can start at startingPlace + 1
+		for(int x = startingPlace + 1; x < numnodes; x++)
 		{
-			bestLen = currentLen;
-			for(int z = 0; z < numnodes; z++)
-				bestTour[z] = currentTour[z];
+			swap(startingPlace, x);
+			// Matthew Marine also pointed out how to use the summing correctly in this case
+			sum += graph->weight(currentTour[startingPlace - 1], currentTour[startingPlace]);
+
+			tourCycle(sum, startingPlace);
+			tour(arr, numnodes, startingPlace + 1, sum);
+			swap(x, startingPlace);
 		}
 	}
-	else
-	{
-		double sum = 0.0;
-		for(int y = 0; y < startingPlace - 1; y++)
-			sum = graph->weight(currentTour[y], currentTour[y + 1]);
 
-		if(sum < bestLen)
-		{
-			for(int x = startingPlace + 1; x < numnodes; x++)
-			{
-				swap(startingPlace, x);
-				tourCycle(sum, startingPlace);
-				tour(arr, numnodes, startingPlace + 1);
-				swap(x, startingPlace);
-			}
-		}
-		else
-			return;
-	}
 }
 
 void tourCycle(double sum, int cur)
 {
-	double newsum = 0;
-
 	// Sums the current tour
 	for(int x = 0; x < size - 1; x++)
-		newsum += graph->weight(currentTour[x], currentTour[x + 1]);
+		sum += graph->weight(currentTour[x], currentTour[x + 1]);
 
-	newsum += graph->weight(currentTour[size - 1], 0);
+	sum += graph->weight(currentTour[size - 1], 0);
 
-	if(newsum < bestLen)
+	if(sum < bestLen)
 	{
 		for(int y = 0; y < size; y++)
 			bestTour[y] = currentTour[y];
 
-		bestLen = newsum;
+		bestLen = sum;
 	}
 
 }
